@@ -4,7 +4,7 @@ A lightweight, serverless Pastebin application built with Node.js and Redis. Sha
 
 ## 🚀 Live Demo
 
-**Deployed URL:** [Your deployment URL will go here after deploying to Vercel]
+**Deployed URL:** https://paste-bin-v.vercel.app
 
 ## 📋 Features
 
