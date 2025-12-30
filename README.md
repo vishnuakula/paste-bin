@@ -19,7 +19,7 @@ A lightweight, serverless Pastebin application built with Node.js and Redis. Sha
 ## 🛠️ Tech Stack
 
 - **Runtime:** Node.js 18+
-- **Serverless Platform:** Vercel
+- **Deployment:** Render.com
 - **Database:** Upstash Redis (serverless-compatible)
 - **Frontend:** Vanilla HTML, CSS, JavaScript
 - **Dependencies:** 
@@ -342,4 +342,4 @@ For questions or issues, please open a GitHub issue.
 
 ---
 
-**Built with ❤️ using Node.js, Redis, and Vercel**
+**Built with ❤️ using Node.js, Redis, and Render.com**
