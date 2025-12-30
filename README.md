@@ -67,55 +67,42 @@ A lightweight, serverless Pastebin application built with Node.js and Redis. Sha
    - Copy the `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` from the database details page
    - Paste them into your `.env.local` file
 
-4. **Install Vercel CLI** (for local development)
-   ```bash
-   npm install -g vercel
-   ```
-
-5. **Run the development server**
+4. **Run the development server**
    ```bash
    npm run dev
    ```
    
    The application will be available at **http://localhost:3000**
 
-## 🌐 Deployment to Vercel
+## 🌐 Deployment to Render.com
 
-### Using Vercel CLI
+### Quick Deployment Steps
 
-1. **Login to Vercel**
-   ```bash
-   vercel login
-   ```
+1. **Sign up at Render.com**
+   - Go to [render.com](https://render.com)
+   - Sign in with GitHub
 
-2. **Deploy to production**
-   ```bash
-   npm run deploy
-   ```
-   
-   Or simply:
-   ```bash
-   vercel --prod
-   ```
+2. **Create a New Web Service**
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
 
-3. **Set environment variables**
-   
-   During deployment, Vercel will prompt you to set environment variables. Add:
-   - `UPSTASH_REDIS_REST_URL`
-   - `UPSTASH_REDIS_REST_TOKEN`
-   
-   Alternatively, set them in the Vercel dashboard:
-   - Go to your project settings
-   - Navigate to "Environment Variables"
-   - Add the Redis credentials
+3. **Configure the service**
+   - **Name:** paste-bin (or any name you prefer)
+   - **Branch:** main
+   - **Build Command:** `npm install`
+   - **Start Command:** `node server.js`
 
-### Using Vercel Dashboard
+4. **Add Environment Variables**
+   - Click "Environment Variables"
+   - Add these variables:
+     - `UPSTASH_REDIS_REST_URL` = your Redis URL
+     - `UPSTASH_REDIS_REST_TOKEN` = your Redis token
+     - `TEST_MODE` = 0
 
-1. Push your code to GitHub/GitLab/Bitbucket
-2. Go to [vercel.com](https://vercel.com)
-3. Click "New Project" and import your repository
-4. Add environment variables in the project settings
-5. Deploy!
+5. **Deploy!**
+   - Click "Create Web Service"
+   - Wait 2-3 minutes for deployment
+   - You'll get a URL like: `https://your-app.onrender.com`
 
 ## 📖 API Documentation
 
@@ -162,7 +149,7 @@ A lightweight, serverless Pastebin application built with Node.js and Redis. Sha
 ```json
 {
   "id": "xK2mP9qR1z",
-  "url": "https://your-app.vercel.app/p/xK2mP9qR1z"
+  "url": "https://your-app.onrender.com/p/xK2mP9qR1z"
 }
 ```
 
@@ -220,11 +207,11 @@ This application uses **Upstash Redis** as its persistence layer.
 
 ### Why Upstash Redis?
 
-1. **Serverless-Compatible:** Designed for serverless environments with REST API access (no persistent connections required)
-2. **Free Tier:** Generous free tier perfect for this assignment and small-scale usage
-3. **Global Distribution:** Low-latency access from Vercel edge functions
-4. **Simple Setup:** Easy integration with Vercel via environment variables
-5. **Vercel Integration:** Official Vercel marketplace integration available
+1. **Serverless-Compatible:** Designed for serverless environments with REST API access
+2. **Free Tier:** Generous free tier perfect for this assignment
+3. **Global Distribution:** Low-latency access worldwide
+4. **Simple Setup:** Easy integration via environment variables
+5. **No Connection Pooling:** Works perfectly with serverless functions
 
 ### Data Model
 
@@ -259,7 +246,7 @@ When `TEST_MODE=1`, the application will respect the `x-test-now-ms` header:
 
 ```bash
 curl -H "x-test-now-ms: 1704070800000" \
-  https://your-app.vercel.app/api/pastes/abc123
+  https://your-app.onrender.com/api/pastes/abc123
 ```
 
 This allows precise testing of expiry logic without waiting for real time to pass.
@@ -276,9 +263,9 @@ This allows precise testing of expiry logic without waiting for real time to pas
 - Enables deterministic time testing via `x-test-now-ms` header
 - Allows precise control over expiry logic for automated grading
 
-### 3. **Serverless Architecture**
-- Built with Vercel serverless functions (no persistent Node.js process)
+### 3. **Serverless-Ready Architecture**
 - Stateless design - all state stored in Redis
+- Works with any serverless platform (Render.com, Vercel, AWS Lambda, etc.)
 - Scales automatically with traffic
 
 ### 4. **XSS Protection**
@@ -316,7 +303,6 @@ Paste-Bin/
 ├── .env.example                # Environment variable template
 ├── .gitignore                  # Git ignore rules
 ├── package.json                # Project dependencies
-├── vercel.json                 # Vercel configuration
 └── README.md                   # This file
 ```
 
@@ -326,7 +312,7 @@ Paste-Bin/
 - **XSS prevention:** HTML escaping for user-generated content
 - **Input validation:** Strict validation of all user inputs
 - **Rate limiting:** Consider adding rate limiting for production use
-- **HTTPS only:** Enforced by Vercel for all deployed apps
+- **HTTPS only:** Enforced by Render.com and most modern hosting platforms
 
 ## 📝 License
 
