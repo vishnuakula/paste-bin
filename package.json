@@ -24,7 +24,5 @@
     "express": "^4.18.2",
     "nanoid": "^3.3.7"
   },
-  "devDependencies": {
-    "vercel": "^33.0.1"
-  }
+  "devDependencies": {}
 }
