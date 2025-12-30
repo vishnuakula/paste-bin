@@ -1,6 +1,15 @@
 {
     "version": 2,
+    "env": {
+        "UPSTASH_REDIS_REST_URL": "@upstash_redis_rest_url",
+        "UPSTASH_REDIS_REST_TOKEN": "@upstash_redis_rest_token",
+        "TEST_MODE": "0"
+    },
     "builds": [
+        {
+            "src": "api/**/*.js",
+            "use": "@vercel/node"
+        },
         {
             "src": "public/**",
             "use": "@vercel/static"
