@@ -3,12 +3,10 @@
   "version": "1.0.0",
   "description": "A simple Pastebin-like application with TTL expiry and view count limits",
   "type": "module",
-  "main": "server.js",
   "scripts": {
     "dev": "node server.js",
-    "dev:vercel": "vercel dev",
-    "build": "vercel build",
-    "deploy": "vercel --prod"
+    "build": "echo 'Build complete'",
+    "start": "echo 'Use Vercel serverless functions'"
   },
   "keywords": [
     "pastebin",
@@ -20,11 +18,11 @@
   "license": "MIT",
   "dependencies": {
     "@upstash/redis": "^1.28.1",
-    "dotenv": "^16.6.1",
-    "express": "^4.18.2",
     "nanoid": "^3.3.7"
   },
   "devDependencies": {
+    "dotenv": "^16.6.1",
+    "express": "^4.18.2",
     "vercel": "^33.0.1"
   }
 }
