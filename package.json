@@ -2,9 +2,11 @@
   "name": "pastebin-lite",
   "version": "1.0.0",
   "description": "A simple Pastebin-like application with TTL expiry and view count limits",
-  "main": "index.js",
+  "type": "module",
+  "main": "server.js",
   "scripts": {
-    "dev": "vercel dev",
+    "dev": "node server.js",
+    "dev:vercel": "vercel dev",
     "build": "vercel build",
     "deploy": "vercel --prod"
   },
@@ -18,6 +20,8 @@
   "license": "MIT",
   "dependencies": {
     "@upstash/redis": "^1.28.1",
+    "dotenv": "^16.6.1",
+    "express": "^4.18.2",
     "nanoid": "^3.3.7"
   },
   "devDependencies": {

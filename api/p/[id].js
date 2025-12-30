@@ -5,53 +5,53 @@ import { getCurrentTime } from '../../lib/timeHelper.js';
  * Escape HTML to prevent XSS attacks
  */
 function escapeHtml(text) {
-    const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-    };
-    return text.replace(/[&<>"']/g, (char) => map[char]);
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text.replace(/[&<>"']/g, (char) => map[char]);
 }
 
 export default async function handler(req, res) {
-    try {
-        const { id } = req.query;
+  try {
+    const { id } = req.query;
 
-        if (!id) {
-            res.setHeader('Content-Type', 'text/html');
-            return res.status(404).send(generate404Page());
-        }
-
-        // Get current time (supports deterministic testing)
-        const currentTime = getCurrentTime(req);
-
-        // Get paste and increment view count (atomically)
-        const paste = await getPaste(id, currentTime, true);
-
-        if (!paste) {
-            res.setHeader('Content-Type', 'text/html');
-            return res.status(404).send(generate404Page());
-        }
-
-        // Return HTML with paste content
-        res.setHeader('Content-Type', 'text/html');
-        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-        return res.status(200).send(generatePastePage(paste));
-
-    } catch (error) {
-        console.error('Error viewing paste:', error);
-        res.setHeader('Content-Type', 'text/html');
-        return res.status(500).send(generate500Page());
+    if (!id) {
+      res.setHeader('Content-Type', 'text/html');
+      return res.status(404).send(generate404Page());
     }
+
+    // Get current time (supports deterministic testing)
+    const currentTime = getCurrentTime(req);
+
+    // Get paste and increment view count (atomically)
+    const paste = await getPaste(id, currentTime, true);
+
+    if (!paste) {
+      res.setHeader('Content-Type', 'text/html');
+      return res.status(404).send(generate404Page());
+    }
+
+    // Return HTML with paste content
+    res.setHeader('Content-Type', 'text/html');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    return res.status(200).send(generatePastePage(paste));
+
+  } catch (error) {
+    console.error('Error viewing paste:', error);
+    res.setHeader('Content-Type', 'text/html');
+    return res.status(500).send(generate500Page());
+  }
 }
 
 function generatePastePage(paste) {
-    const remainingViews = getRemainingViews(paste);
-    const expiresAt = getExpiresAt(paste);
+  const remainingViews = getRemainingViews(paste);
+  const expiresAt = getExpiresAt(paste);
 
-    return `
+  return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -212,7 +212,7 @@ function generatePastePage(paste) {
 }
 
 function generate404Page() {
-    return `
+  return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -296,7 +296,7 @@ function generate404Page() {
 }
 
 function generate500Page() {
-    return `
+  return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
