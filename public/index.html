@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pastebin Lite - Share Text Instantly</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .container {
+      max-width: 700px;
+      width: 100%;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+    }
+    
+    .header h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    
+    .header p {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+    
+    .form-container {
+      padding: 40px 30px;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #212529;
+      font-size: 14px;
+    }
+    
+    .label-optional {
+      color: #6c757d;
+      font-weight: 400;
+      font-size: 13px;
+    }
+    
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      padding: 15px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      resize: vertical;
+      transition: all 0.3s ease;
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    input[type="number"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .optional-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+    
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .result {
+      margin-top: 30px;
+      padding: 20px;
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      border-radius: 8px;
+      display: none;
+    }
+    
+    .result.show {
+      display: block;
+      animation: slideDown 0.4s ease-out;
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .result h3 {
+      color: #155724;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    
+    .url-container {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .url-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #c3e6cb;
+      border-radius: 6px;
+      font-size: 14px;
+      background: white;
+    }
+    
+    .copy-btn {
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    
+    .copy-btn:hover {
+      background: #218838;
+    }
+    
+    .copy-btn.copied {
+      background: #155724;
+    }
+    
+    .error {
+      margin-top: 15px;
+      padding: 15px;
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      border-radius: 8px;
+      color: #721c24;
+      display: none;
+    }
+    
+    .error.show {
+      display: block;
+      animation: slideDown 0.4s ease-out;
+    }
+    
+    .hint {
+      font-size: 13px;
+      color: #6c757d;
+      margin-top: 5px;
+    }
+    
+    @media (max-width: 600px) {
+      .optional-fields {
+        grid-template-columns: 1fr;
+      }
+      
+      .header h1 {
+        font-size: 24px;
+      }
+      
+      .form-container {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📋 Pastebin Lite</h1>
+      <p>Share text with optional expiry and view limits</p>
+    </div>
+    
+    <div class="form-container">
+      <form id="pasteForm">
+        <div class="form-group">
+          <label for="content">
+            Paste Content <span style="color: #dc3545;">*</span>
+          </label>
+          <textarea 
+            id="content" 
+            name="content" 
+            placeholder="Enter your text here..."
+            required
+          ></textarea>
+        </div>
+        
+        <div class="optional-fields">
+          <div class="form-group">
+            <label for="ttl_seconds">
+              Expiry Time <span class="label-optional">(seconds)</span>
+            </label>
+            <input 
+              type="number" 
+              id="ttl_seconds" 
+              name="ttl_seconds" 
+              min="1"
+              placeholder="e.g., 3600"
+            >
+            <div class="hint">Leave empty for no expiry</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="max_views">
+              Max Views <span class="label-optional">(optional)</span>
+            </label>
+            <input 
+              type="number" 
+              id="max_views" 
+              name="max_views" 
+              min="1"
+              placeholder="e.g., 10"
+            >
+            <div class="hint">Leave empty for unlimited</div>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn" id="submitBtn">
+          Create Paste
+        </button>
+      </form>
+      
+      <div class="error" id="errorMessage"></div>
+      
+      <div class="result" id="result">
+        <h3>✅ Paste created successfully!</h3>
+        <div class="url-container">
+          <input 
+            type="text" 
+            class="url-input" 
+            id="pasteUrl" 
+            readonly
+          >
+          <button class="copy-btn" id="copyBtn">Copy URL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const form = document.getElementById('pasteForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const result = document.getElementById('result');
+    const errorMessage = document.getElementById('errorMessage');
+    const pasteUrl = document.getElementById('pasteUrl');
+    const copyBtn = document.getElementById('copyBtn');
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Hide previous results
+      result.classList.remove('show');
+      errorMessage.classList.remove('show');
+      
+      // Get form data
+      const content = document.getElementById('content').value.trim();
+      const ttl_seconds = document.getElementById('ttl_seconds').value;
+      const max_views = document.getElementById('max_views').value;
+      
+      // Validate content
+      if (!content) {
+        showError('Content cannot be empty');
+        return;
+      }
+      
+      // Prepare request body
+      const body = { content };
+      
+      if (ttl_seconds) {
+        const ttl = parseInt(ttl_seconds, 10);
+        if (ttl < 1) {
+          showError('TTL must be at least 1 second');
+          return;
+        }
+        body.ttl_seconds = ttl;
+      }
+      
+      if (max_views) {
+        const views = parseInt(max_views, 10);
+        if (views < 1) {
+          showError('Max views must be at least 1');
+          return;
+        }
+        body.max_views = views;
+      }
+      
+      // Disable submit button
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating...';
+      
+      try {
+        const response = await fetch('/api/pastes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to create paste');
+        }
+        
+        // Show success result
+        pasteUrl.value = data.url;
+        result.classList.add('show');
+        
+        // Reset form
+        form.reset();
+        
+      } catch (error) {
+        showError(error.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Paste';
+      }
+    });
+    
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(pasteUrl.value);
+        copyBtn.textContent = '✓ Copied!';
+        copyBtn.classList.add('copied');
+        
+        setTimeout(() => {
+          copyBtn.textContent = 'Copy URL';
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      } catch (error) {
+        // Fallback for older browsers
+        pasteUrl.select();
+        document.execCommand('copy');
+        copyBtn.textContent = '✓ Copied!';
+      }
+    });
+    
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.classList.add('show');
+    }
+  </script>
+</body>
+</html>
